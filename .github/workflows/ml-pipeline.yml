@@ -1,0 +1,44 @@
+name: ML Pipeline CI
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Test Model
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - name: Install dependencies
+        run: pip install numpy pandas scikit-learn
+
+      - name: Run tests
+        run: echo "Testing model..."
+
+  train:
+    name: Train Model
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - name: Install dependencies
+        run: pip install numpy pandas scikit-learn
+
+      - name: Train model
+        run: python train.py
