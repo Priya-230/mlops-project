@@ -10,7 +10,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -18,10 +18,13 @@ jobs:
           python-version: 3.9
 
       - name: Install dependencies
-        run: pip install numpy pandas scikit-learn
+        run: |
+          pip install numpy pandas scikit-learn
 
       - name: Run tests
-        run: echo "Testing model..."
+        run: |
+          echo "Running model tests..."
+          python train.py
 
   train:
     name: Train Model
@@ -30,7 +33,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -38,7 +41,20 @@ jobs:
           python-version: 3.9
 
       - name: Install dependencies
-        run: pip install numpy pandas scikit-learn
+        run: |
+          pip install numpy pandas scikit-learn matplotlib
 
-      - name: Train model
-        run: python train.py
+      - name: Run Training
+        run: |
+          echo "Training model..."
+          python train.py
+
+      - name: Create dummy model file
+        run: |
+          echo "model data" > model.pkl
+
+      - name: Upload model artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: trained-model
+          path: model.pkl
